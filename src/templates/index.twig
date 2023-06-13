@@ -1,0 +1,19 @@
+{# @var plugin \swdevelopment\craftcalapi\CalApi #}
+{# @var settings \swdevelopment\craftcalapi\models\Settings #}
+
+{% extends "_layouts/cp" %}
+
+    {% set title = 'Cal.com API' %}
+        
+    {% set selectedSubnavItem = 'dashboard' %}
+
+    {% block content %}
+        <ul class="icons">
+            <li>
+                <a href="{{ url('calapi/dashboard') }}" data-icon="dashboard">Dashboard</a>
+            </li>
+            <li>
+                <a href="{{ url('calapi/bookings') }}" data-icon="book">Bookings</a>
+            </li>
+        </ul>
+    {% endblock %}

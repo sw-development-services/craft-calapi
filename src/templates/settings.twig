@@ -1,0 +1,114 @@
+{# @var plugin \swdevelopment\craftcalapi\CalApi #}
+{# @var settings \swdevelopment\craftcalapi\models\Settings #}
+
+{% set settings = craft.calApi.getSettings() %}
+
+{% extends "_layouts/cp" %}
+{% import '_includes/forms.twig' as forms %}
+{% set title = "CAL.COM API Settings" %}
+{% set fullPageForm = true %}    
+    {# 
+    {% set crumbs = [
+        { label: craft.calapi.name, url: url("calapi") },
+        { label: "Settings"|t("express-forms"), url: url("express-forms/settings") },
+        ] 
+    %} 
+    #}
+
+{% block actionButton %}
+    <div class="buttons">
+        <div class="btngroup submit">
+            <input type="submit" class="btn submit" value="{{ "Save"|t("calapi") }}">
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+        
+        <input type="hidden" name="action" value="plugins/save-plugin-settings">
+        <input type="hidden" name="pluginHandle" value="calapi">
+    
+    {{ forms.textField({
+        name: 'username',
+        label: 'User Name'|t('calapi'),
+        value: settings.username,
+        first: true,
+        autofocus: true,
+        instructions: 'username for the Cal.com user.'|t('calapi'),
+        required:true,
+    }) }}
+
+    {{ forms.textField({
+        name: 'email',
+        label: 'Email'|t('calapi'),
+        value: settings.email,
+        instructions: 'Email for the Cal.com user.'|t('calapi'),
+        required:true,
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: "API Key"|t("calapi"),
+        name: 'apiKey',
+        instructions: "Enter your Cal.com API key."|t("calapi"),
+        value: settings.apiKey,
+        suggestEnvVars: true,
+        type: 'text',
+        required: true,
+        errors: settings.getErrors('apiKey')
+    }) }}
+
+    {{ forms.autosuggestField({
+        label: "Webhook Secret"|t("calapi"),
+        name: 'webhookSecret',
+        instructions: "Enter your Cal.com Webhook secret. This is a string that the plugin uses to encrypt webhook messages. "|t("calapi"),
+        value: settings.webhookSecret,
+        suggestEnvVars: true,
+        type: 'text',
+        required: false,
+        errors: settings.getErrors('webhookSecret')
+    }) }}
+
+    <p>This plugin can add your Cal.com customers to Stripe. If you want to have the plugin add customers to Stripe when bookings are created, enable the setting below.</p>
+    {{ forms.lightswitchField({
+        label:"Add Customer to Stripe?",
+        id:"useStripe_lightswitch",
+        name:"useStripe",
+        required: false,
+        on: (settings.useStripe ?? true),
+        errors: settings.getErrors('useStripe')
+    })  }}
+
+    <div class="hidden field" id="stripe_secret_panel">
+        {{ forms.autosuggestField({
+            label: "Stripe Secret"|t("calapi"),
+            id: 'stripeSecret',
+            name: 'stripeSecret',
+            instructions: "Enter your Stripe secret. This is a string that Stripe uses to contact the API server."|t("calapi"),
+            value: settings.stripeSecret,
+            suggestEnvVars: true,
+            type: 'text',
+            required: false,
+            errors: settings.getErrors('stripeSecret')
+        })  }}
+
+    </div>
+
+    <ul>
+        {% for setting in settings %}
+            <li>{{ setting }}</li>
+        {% endfor %}
+    </ul>
+
+{% endblock %}    
+
+
+
+{% js %}
+    let stripeSetting = document.getElementById(`useStripe_lightswitch`);
+    stripeSetting.addEventListener('click', function () {
+        var setting = document.getElementById('stripe_secret_panel');
+        var classes = setting.classList;
+        setting.classList.toggle('hidden');
+    });
+{% endjs %}
+

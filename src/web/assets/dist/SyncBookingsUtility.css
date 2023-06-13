@@ -1,0 +1,18 @@
+.sync h2 {
+  font-size: 1.25em;
+  font-weight: 700;
+  margin-bottom: 25px;
+}
+
+.sync-bookings {
+  padding: 25px 0;
+}
+.sync-bookings h2 {
+  padding-top: 10px;
+}
+.sync-bookings .stats-table tbody {
+  font-size: 14px;
+}
+.sync-bookings .stats-table tbody td {
+  font-weight: 500;
+}

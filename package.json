@@ -1,0 +1,24 @@
+{
+  "name": "calapi",
+  "version": "1.0.0",
+  "description": "Craft CMS plugin for connecting to Cal.com",
+  "main": "index.js",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "watch": "cross-env NODE_ENV=development node_modules/webpack/bin/webpack.js --watch --progress --config=node_modules/laravel-mix/setup/webpack.config.js",
+    "production": "cross-env NODE_ENV=production node_modules/webpack/bin/webpack.js --progress --config=node_modules/laravel-mix/setup/webpack.config.js"
+  },
+  "author": "Tim Strawbridge",
+  "license": "MIT",
+  "devDependencies": {
+    "laravel-mix": "^6.0.49",
+    "mix-tailwindcss": "^1.3.0",
+    "resolve-url-loader": "^5.0.0",
+    "sass": "^1.62.1",
+    "sass-loader": "^12.6.0",
+    "tailwindcss": "^3.3.2"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3"
+  }
+}

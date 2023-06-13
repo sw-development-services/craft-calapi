@@ -1,0 +1,26 @@
+{% extends "_layouts/cp" %}
+    
+{% set last30BookingCount = craft.calApi.getBookingsPastDaysCount(30) %}
+{% set todaysBookingCount = craft.calApi.getBookingsPastDaysCount(0) %}
+
+{% do view.registerAssetBundle("swdevelopment\\craftcalapi\\assetbundles\\PluginAssetBundle") %}
+
+{% set title = "Dashboard" %}
+    {% block content %}
+        <div class="container dashboard flex">
+            <div class="card ring-gray-200">
+                <div class="card-heading font-bold">
+                    <h2>Bookings Last 30 Days</h2>
+                </div>
+                <div class="card-body flex">
+                    <span class="count">{{ last30BookingCount|length }}</span>
+                </div>
+            </div>
+            <div class="card ring-gray-200">
+                <div class="card-heading font-bold"><h2>Today's Bookings</h2></div>
+                <div class="card-body flex">
+                    <span class="count">{{ todaysBookingCount|length }}</span>
+                </div>
+            </div>
+        </div>
+    {% endblock %}

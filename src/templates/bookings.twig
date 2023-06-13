@@ -1,0 +1,117 @@
+{% extends "_layouts/cp" %}
+    
+{% import '_includes/forms.twig' as forms %}
+{% do view.registerAssetBundle("swdevelopment\\craftcalapi\\assetbundles\\PluginAssetBundle") %}
+
+{% set title = "Bookings" %}  
+{% set selectedSubnavItem = 'bookings' %}
+
+{% set bookings = craft.calApi.getAllBookings %}    
+{% set eventTypes = craft.calApi.getEventTypes %}   
+   
+{% block content %}
+
+    {% set var = {} %}
+    {% for eventType in eventTypes %}
+        {% set var = var|merge( { ('eventID'~eventType.id) : eventType.title } ) %}
+    {% endfor %}    
+    
+    {# add new booking button here #}
+    <div class="booking-form">
+        {{ forms.button({
+            label: 'Add Booking',
+            spinner: true,
+            id:'add_booking',
+            class:'btn submit primary',
+            type:'button'
+        }) }}
+
+        <div class="hidden" id="new_booking_fields">
+
+            <form class="booking" id="new_booking" method="POST" accept-charset="UTF-8">
+                {{ actionInput('calapi/cal/get-event-data') }}
+                {{ csrfInput() }}
+
+                {{ hiddenInput('calendarLink', '',
+                    { id:'calendarLink' } ) 
+                }}
+            
+                <div class="field">
+                    {{ forms.selectField({
+                        id: 'event_type',
+                        name: 'event_type[id]',
+                        required: true,
+                        label:'Select an event type',
+                        options: var
+                    }) }}
+                </div>
+            </form>
+            
+            <!-- Cal element-click embed code begins -->
+            <script type="text/javascript">
+            (function (C, A, L) { let p = function (a, ar) { a.q.push(ar); }; let d = C.document; C.Cal = C.Cal || function () { let cal = C.Cal; let ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { const api = function () { p(api, arguments); }; const namespace = ar[1]; api.q = api.q || []; typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+            Cal("init", {origin:"https://app.cal.com"});
+
+            Cal("ui", {"styles":{"branding":{"brandColor":"#000000"}},"hideEventTypeDetails":false});
+            </script>
+            <!-- Cal element-click embed code ends -->
+
+            <a href="#" id="schedule" class="btn submit primary">Open Scheduler</a>
+            <!-- // Important: Make sure to add `data-cal-link="carcaresolutionsusa/scheduled-appointment"` attribute to the element you want to open Cal on click  -->
+            
+        </div>
+        
+    </div>
+
+    {% if bookings|length > 0 %}
+        <div class="tableview tablepan">
+            <table class="data fullwidth">
+                <thead>
+                    <tr>
+                        <td>ID</td>
+                        <td>Title</td>
+                        <td>Description</td>
+                        <td>Start Time</td>
+                        <td>Attendees Email</td>
+                        <td>Status</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for booking in bookings %}
+                        {% set attendeeEmail = booking.email %}
+                        {% set status = booking.status %}    
+                        {# {% if booking.attendees|length > 0 %}
+                            {% set attendeeEmail = booking.attendees[0]['email'] %}
+                        {% endif %} #}
+                        <tr>
+                            <td>{{ booking.id }}</td>
+                            <td>{{ booking.title }}</td>   
+                            <td>{{ booking.description }}</td>
+                            <td>{{ booking.date }}</td> 
+                            <td><a href="mailto:{{attendeeEmail}}">{{ attendeeEmail }}</a></td> 
+                            <td>{% if status %} <i style="color:green;font-size:1.25em;" data-icon="check"></i> {% endif %}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    
+    {% else %}    
+        <p>There are no bookings to display</p>    
+    {% endif %}
+    
+
+{% endblock %}    
+
+
+{% css %}
+    .tableview table{
+        & thead{ 
+            & td{
+                font-weight: 700;
+            }
+        }
+    }
+{% endcss %}
+
+

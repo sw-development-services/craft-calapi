@@ -1,0 +1,88 @@
+
+{% set title = "Bookings" %}  
+
+{% import '_includes/forms.twig' as forms %}
+
+{% set craftLastSync = craft.calApi.getLastBookingSync %}
+
+{# gets the synced bookings from schedule table #}
+{% set craftSyncedBookings = craft.calApi.getSyncedBookings %} 
+
+{% block content %}
+    {# get the last sync date #}
+    
+    <div class="sync">
+        <h2>{{ 'Sync Bookings'|t('app') }}</h2>
+
+        <div>
+            <form class="utility" method="post" accept-charset="UTF-8">
+                {{ actionInput('calapi/utility/sync-bookings') }}
+                {{ csrfInput() }}
+
+                {{ forms.button({
+                    label: 'Sync Bookings',
+                    spinner: true,
+                    id:'sync_bookings',
+                    class:'btn submit secondary',
+                    type:'submit'
+                }) }}  
+            
+            </form>
+
+            <div class="sync-bookings">
+                <h2>Sync Statistics</h2>
+                <table class="data fullwidth collapsible stats-table">
+                    <tbody class="">
+                        <tr>
+                            <th class="light">Number of Syncs</th>
+                            <td>{{ craftLastSync|length }}</td>
+                        </tr>
+                        <tr>
+                            <th class="light">Last Sync</th>
+                            <td>{{ craftLastSync.dateCreated }}</td>
+                        </tr>
+                        
+                    </tbody>
+                </table>                
+
+            </div>
+
+            {# show booking syncs here #}
+
+            {% if craftSyncedBookings|length > 0 %}
+            <div class="tableview tablepan">
+                <table class="data fullwidth">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Date</th>
+                            <th>Records Added</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        
+                        {% for booking in craftSyncedBookings %}
+                            <tr>
+                                <td>{{ booking.id }}</td>
+                                <td>{{ booking.dateCreated }}</td>
+                                <td>{{ booking.records_added }}</td>
+                            </tr>
+                        {% endfor %}
+                        
+                    </tbody>
+                </table>
+
+            </div>
+
+            {% endif %}
+        
+
+
+        </div>
+    </div>
+    
+    
+{% endblock %}
+
+

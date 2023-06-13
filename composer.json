@@ -1,0 +1,44 @@
+{
+    "name": "swdevelopment/craft-calapi",
+    "description": "API for Cal.com - Booking API",
+    "type": "craft-plugin",
+    "license": "mit",
+    "support": {
+        "email": "tstrawbridge@swdevteam.com"
+    },
+    "require": {
+        "craftcms/cms": "^4.3.0",
+        "nesbot/carbon": "^2.66"
+    },
+    "require-dev": {
+        "craftcms/ecs": "dev-main",
+        "craftcms/phpstan": "dev-main"
+    },
+    "autoload": {
+        "psr-4": {
+            "swdevelopment\\craftcalapi\\": "src/"
+        }
+    },
+    "extra": {
+        "handle": "calapi",
+        "name": "Cal.com API",
+        "developer": "Tim Strawbridge",
+        "documentationUrl": "https://github.com/sw-development-services/craft-calapi",
+        "class": "swdevelopment\\craftcalapi\\CalApi"
+    },
+    "scripts": {
+        "check-cs": "ecs check --ansi",
+        "fix-cs": "ecs check --ansi --fix",
+        "phpstan": "phpstan --memory-limit=1G"
+    },
+    "config": {
+        "sort-packages": true,
+        "platform": {
+            "php": "8.0.2"
+        },
+        "allow-plugins": {
+            "yiisoft/yii2-composer": true,
+            "craftcms/plugin-installer": true
+        }
+    }
+}
