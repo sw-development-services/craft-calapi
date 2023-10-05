@@ -1,6 +1,6 @@
 {
   "name": "calapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Craft CMS plugin for connecting to Cal.com",
   "main": "index.js",
   "scripts": {
