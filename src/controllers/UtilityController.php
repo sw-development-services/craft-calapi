@@ -62,7 +62,14 @@ class UtilityController extends Controller
 
     function getAllCalBookings()
     {
-        return JSON::decode( CalApi::getInstance()->cal->GetBookings(), true );
+        // check if json is valid
+        $data = CalApi::getInstance()->cal->GetBookings();
+        if( !empty( $data ) ){
+            $decoded = JSON::decode($data, true);
+            return $decoded;
+        }
+        
+        return [];
     }
 
     function loopResults($bookings)
